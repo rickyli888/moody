@@ -4,6 +4,13 @@ import type { Metadata } from "next";
 import AuthProvider from "@/lib/AuthProvider";
 
 import "./globals.css";
+import localFont from "next/font/local";
+
+const satoshi = localFont({
+	src: "../../public/fonts/Satoshi-Variable.ttf",
+	variable: "--font-satoshi",
+	weight: "300 900",
+});
 
 export const metadata: Metadata = {
 	title: "moody list",
@@ -17,7 +24,8 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<body className={`${GeistSans.variable} ${GeistMono.variable}`}>
+			<body
+				className={`${satoshi.className} ${GeistSans.variable} ${GeistMono.variable}`}>
 				<AuthProvider>{children}</AuthProvider>
 			</body>
 		</html>

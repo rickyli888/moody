@@ -146,6 +146,20 @@ export const moodMap: Record<string, Mood> = {
 	},
 };
 
+interface SpotifyTrack {
+	id: string;
+	uri: string;
+	name: string;
+	artists: { name: string }[];
+	album: { name: string };
+}
+
+interface AudioFeatures {
+	energy: number;
+	valence: number;
+	danceability: number;
+}
+
 export async function generatePlaylist(
 	mood: string,
 	accessToken: string,
@@ -157,11 +171,14 @@ export async function generatePlaylist(
 	}
 
 	const searchResults = await searchTracks(moodParams.name, accessToken);
-	const tracks = searchResults.tracks.items;
+	const tracks = searchResults.tracks.items as SpotifyTrack[];
 
 	const filteredTracks = await Promise.all(
-		tracks.map(async (track: any) => {
-			const features = await getAudioFeatures(track.id, accessToken);
+		tracks.map(async (track: SpotifyTrack) => {
+			const features = (await getAudioFeatures(
+				track.id,
+				accessToken
+			)) as AudioFeatures;
 			return { track, features };
 		})
 	);
