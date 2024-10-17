@@ -12,8 +12,15 @@ const config: Config = {
 		extend: {
 			fontFamily: {
 				sans: ["var(--font-satoshi)"],
+				sansSecondary: ["var(--font-geist-sans)"],
+				mono: ["var(--font-geist-mono)"],
 			},
 			colors: {
+				alabaster: "hsl(48, 25%, 98%)",
+				pistachio: "hsl(97, 49%, 58%)",
+				jungleGreen: "hsl(165, 50%, 43%)",
+				pear: "hsl(68, 80%, 56%)",
+				yellowGreen: "hsl(84, 67%, 57%)",
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
 				card: {
