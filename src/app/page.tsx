@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+import styles from "@/styles/sign_in.module.css";
+
 interface Playlist {
 	name: string;
 	tracks: {
@@ -80,17 +82,19 @@ export default function Home() {
 						strokeWidth="2"
 						strokeLinecap="round"
 						strokeLinejoin="round"
-						className="h-10 w-10">
+						className={`h-10 w-10 ${styles.animatedGradientSvg}`}>
 						<path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
 					</svg>
-					<h2 className="text-3xl font-bold">moody</h2>
+					<h2 className={`${styles.animatedGradientText} text-3xl font-bold`}>
+						moody
+					</h2>
 				</div>
 				<div className="absolute inset-0 flex justify-center items-center">
 					<Card className="w-[600px] p-20">
 						<CardHeader>
 							<CardTitle className="text-3xl text-center">
 								welcome to{" "}
-								<span className="text-transparent bg-clip-text bg-gradient-to-r from-jungleGreen via-pear to-blue-300">
+								<span className="text-transparent bg-clip-text bg-gradient-to-r from-jungleGreen via-pear to-blue-300 hover:scale-105 hover:text-primary transition-colors duration-200">
 									moody
 								</span>
 							</CardTitle>
@@ -127,19 +131,25 @@ export default function Home() {
 						strokeWidth="2"
 						strokeLinecap="round"
 						strokeLinejoin="round"
-						className="h-6 w-6">
+						className="h-6 w-6 text-background">
 						<path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
 					</svg>
-					<h2 className="text-lg font-semibold">Moody List</h2>
+					<h2 className="text-lg font-semibold text-background">moody</h2>
 				</div>
 				<nav className="space-y-2">
-					<Button variant="ghost" className="w-full justify-start">
+					<Button
+						variant="ghost"
+						className="w-full justify-start text-background">
 						Dashboard
 					</Button>
-					<Button variant="ghost" className="w-full justify-start">
+					<Button
+						variant="ghost"
+						className="w-full justify-start text-background">
 						Playlists
 					</Button>
-					<Button variant="ghost" className="w-full justify-start">
+					<Button
+						variant="ghost"
+						className="w-full justify-start text-background">
 						Settings
 					</Button>
 				</nav>
@@ -151,7 +161,7 @@ export default function Home() {
 				<header className="flex items-center justify-between border-b p-4">
 					<h1 className="text-2xl font-bold">Dashboard</h1>
 					<div className="flex items-center space-x-4">
-						<span>{session.user?.name}</span>
+						<span className="font-semibold">{session.user?.name}</span>
 						<Avatar>
 							<AvatarImage src={session.user?.image || undefined} />
 							<AvatarFallback>{session.user?.name?.[0]}</AvatarFallback>

@@ -3,6 +3,7 @@ import { GeistMono } from "geist/font/mono";
 import type { Metadata } from "next";
 import AuthProvider from "@/lib/AuthProvider";
 
+import "@radix-ui/themes/styles.css";
 import "./globals.css";
 import localFont from "next/font/local";
 

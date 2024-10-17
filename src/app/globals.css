@@ -5,9 +5,9 @@
 :root {
 	--alabaster: 48 25% 98%;
 	--pistachio: 97 49% 58%;
-	--jungle-green: 165 50% 43%;
+	--jungle-green: 165 58% 43%;
 	--pear: 68 80% 56%;
-	--yellow-green: 84 67% 57%;
+	--yellow-green: 81 67% 57%;
 
 	--background: var(--alabaster);
 	--foreground: 0 0% 9%;
@@ -18,7 +18,7 @@
 	--secondary-foreground: 0 0% 9%;
 	--accent: var(--pear);
 	--accent-foreground: 0 0% 9%;
-	--muted: var(--yellow-green);
+	--muted: var(--jungle-green);
 	--muted-foreground: 0 0% 9%;
 
 	--card: var(--background);
