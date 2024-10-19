@@ -2,8 +2,12 @@
 
 import { useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
+
+import Link from "next/link";
+
 import MoodSelector from "@/components/MoodSelector";
-import { motion, AnimatePresence } from "framer-motion";
+import PlaylistCard from "@/components/GeneratedPlaylistCard";
+import { AnimatePresence } from "framer-motion";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -33,7 +37,7 @@ export default function Home() {
 	const [loading, setLoading] = useState(false);
 	const { toast } = useToast();
 
-	const handleMoodSelect = async (moodInput: string) => {
+	const handleMoodSelect = async (moodInput: string, genres: string[]) => {
 		setLoading(true);
 		try {
 			const response = await fetch("/api/generate-playlist", {
@@ -41,7 +45,7 @@ export default function Home() {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ mood: moodInput }),
+				body: JSON.stringify({ mood: moodInput, genres }),
 			});
 			if (!response.ok) {
 				throw new Error("Failed to generate playlist");
@@ -66,7 +70,7 @@ export default function Home() {
 
 	const handleRegeneratePlaylist = () => {
 		if (playlist) {
-			handleMoodSelect(playlist.name);
+			handleMoodSelect(playlist.name, []);
 		}
 	};
 
@@ -92,7 +96,7 @@ export default function Home() {
 				<div className="absolute inset-0 flex justify-center items-center">
 					<Card className="w-[600px] p-20">
 						<CardHeader>
-							<CardTitle className="text-3xl text-center">
+							<CardTitle className="text-4xl text-center">
 								welcome to{" "}
 								<span className="text-transparent bg-clip-text bg-gradient-to-r from-jungleGreen via-pear to-blue-300 hover:scale-105 hover:text-primary transition-colors duration-200">
 									moody
@@ -107,7 +111,7 @@ export default function Home() {
 						<CardFooter>
 							<Button
 								onClick={() => signIn("spotify")}
-								className="w-full text-lg py-6">
+								className="w-full text-lg py-6 font-medium">
 								Sign in with Spotify
 							</Button>
 						</CardFooter>
@@ -142,11 +146,13 @@ export default function Home() {
 						className="w-full justify-start text-background">
 						Dashboard
 					</Button>
-					<Button
-						variant="ghost"
-						className="w-full justify-start text-background">
-						Playlists
-					</Button>
+					<Link href="/playlists">
+						<Button
+							variant="ghost"
+							className="w-full justify-start text-background">
+							Playlists
+						</Button>
+					</Link>
 					<Button
 						variant="ghost"
 						className="w-full justify-start text-background">
@@ -172,69 +178,17 @@ export default function Home() {
 
 				{/* Content */}
 				<main className="p-6">
-					<Card className="mb-6">
-						<CardHeader>
-							<CardTitle>Generate Playlist</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<MoodSelector onMoodSelect={handleMoodSelect} />
-						</CardContent>
-					</Card>
+					<MoodSelector onMoodSelect={handleMoodSelect} />
 
 					<AnimatePresence>
-						{loading && (
-							<motion.div
-								initial={{ opacity: 0 }}
-								animate={{ opacity: 1 }}
-								exit={{ opacity: 0 }}
-								className="flex items-center justify-center py-4">
-								<div className="h-12 w-12 animate-spin rounded-full border-b-2 border-primary"></div>
-							</motion.div>
-						)}
-					</AnimatePresence>
-
-					<AnimatePresence>
-						{playlist && (
-							<motion.div
-								initial={{ opacity: 0, y: 20 }}
-								animate={{ opacity: 1, y: 0 }}
-								exit={{ opacity: 0, y: -20 }}
-								transition={{ duration: 0.5 }}>
-								<Card>
-									<CardHeader>
-										<CardTitle>{playlist.name}</CardTitle>
-									</CardHeader>
-									<CardContent>
-										<p className="text-muted-foreground">
-											Total Tracks: {playlist.tracks?.total}
-										</p>
-										<h3 className="mt-4 font-semibold">Sample Tracks:</h3>
-										<ul className="list-inside list-disc space-y-1">
-											{playlist.tracks.items.slice(0, 5).map((track, index) => (
-												<li key={index}>
-													{track.name} -{" "}
-													{track.artists
-														.map((artist) => artist.name)
-														.join(", ")}
-												</li>
-											))}
-										</ul>
-									</CardContent>
-									<CardFooter className="flex justify-between">
-										<Button onClick={handleRegeneratePlaylist}>
-											Regenerate Playlist
-										</Button>
-										<Button asChild>
-											<a
-												href={playlist.external_urls?.spotify}
-												target="_blank"
-												rel="noopener noreferrer">
-												Open in Spotify
-											</a>
-										</Button>
-									</CardFooter>
-								</Card>
-							</motion.div>
+						{(loading || playlist) && (
+							<PlaylistCard
+								name={playlist?.name || ""}
+								tracks={playlist?.tracks || { total: 0, items: [] }}
+								onRegenerate={handleRegeneratePlaylist}
+								spotifyUrl={playlist?.external_urls.spotify || ""}
+								isLoading={loading}
+							/>
 						)}
 					</AnimatePresence>
 				</main>
